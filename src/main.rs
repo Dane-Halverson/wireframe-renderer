@@ -1,14 +1,19 @@
 extern crate glfw;
 extern crate gl;
+extern crate rayon;
+use rayon::prelude::*;
+
 
 mod linear;
 mod shapes;
 mod fox;
+mod dragon;
 
 use std::{thread, time};
 use glfw::{Action, Context, Key};
 use gl::types::*;
 use crate::fox::get_fox;
+use crate::dragon::get_dragon;
 use crate::linear::{Point, point_to_screen, rotate, Vertex};
 use crate::shapes::*;
 
@@ -95,19 +100,28 @@ fn main() {
 fn create_vertices(vert_list: &mut Vec<Vertex>, cam: Point, screen: f32, screen_width: f32) {
     // Define vertex data for the line
     let mut vertices: Vec<f32> = vec![];
-    for i in vert_list{
-        //turns vertices into screen coords
-        let mut point = point_to_screen(i.start, screen, cam);
-        vertices.push(point.x/screen_width);
-        vertices.push(point.y/screen_width);
-        point = point_to_screen(i.end, screen, cam);
-        vertices.push(point.x/screen_width);
-        vertices.push(point.y/screen_width);
 
-        //rotates the points
-        rotate(&mut i.start, 0.0, 0.01, 0.0);
-        rotate(&mut i.end, 0.0, 0.01, 0.0);
-    }
+    let mut vertices: Vec<f32> = vert_list
+        .par_iter_mut()
+        .fold(Vec::new, |mut acc, i| {
+            // turns vertices into screen coords
+            let mut point = point_to_screen(i.start, screen, cam);
+            acc.push(point.x / screen_width);
+            acc.push(point.y / screen_width);
+            point = point_to_screen(i.end, screen, cam);
+            acc.push(point.x / screen_width);
+            acc.push(point.y / screen_width);
+
+            // rotates the points
+            rotate(&mut i.start, 0.0, 0.01, 0.0);
+            rotate(&mut i.end, 0.0, 0.01, 0.0);
+
+            acc
+        })
+        .reduce(Vec::new, |mut acc1, acc2| {
+            acc1.extend(acc2);
+            acc1
+        });
 
     // create a vertex object and vertex buffer object
     let
