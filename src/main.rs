@@ -4,13 +4,11 @@ extern crate gl;
 mod linear;
 mod shapes;
 mod fox;
-mod dragon;
 
 use std::{thread, time};
 use glfw::{Action, Context, Key};
 use gl::types::*;
 use crate::fox::get_fox;
-use crate::dragon::get_dragon;
 use crate::linear::{Point, point_to_screen, rotate, Vertex};
 use crate::shapes::*;
 
