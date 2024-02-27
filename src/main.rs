@@ -2,20 +2,17 @@ extern crate glfw;
 extern crate gl;
 extern crate rayon;
 use rayon::prelude::*;
+use std::path::Path;
 
 
 mod linear;
-mod shapes;
-mod fox;
-mod dragon;
+mod stl_to_shape;
 
 use std::{thread, time};
 use glfw::{Action, Context, Key};
 use gl::types::*;
-use crate::fox::get_fox;
-use crate::dragon::get_dragon;
-use crate::linear::{Point, point_to_screen, rotate, Vertex};
-use crate::shapes::*;
+use crate::linear::{point_to_screen, rotate, Point, Line};
+use crate::stl_to_shape::convert_stl_to_vec;
 
 
 fn main() {
@@ -39,7 +36,7 @@ fn main() {
     unsafe { gl::ClearColor(0.0, 0.0, 0.0, 0.0); }
 
     //the shape to render
-    let mut shape: Vec<Vertex> = get_cube();
+    let mut shape: Vec<Line> = convert_stl_to_vec("./bulb.STL", 0.5);
 
     //initial rotation
     for i in shape.iter_mut() {
@@ -63,7 +60,7 @@ fn main() {
         }
 
         //fills buffer with line data
-        create_vertices(&mut shape, Point{
+        create_lines(&mut shape, Point{
             x: 0.0,
             y: 0.0,
             z: -200.0,
@@ -97,14 +94,14 @@ fn main() {
 
 }
 
-fn create_vertices(vert_list: &mut Vec<Vertex>, cam: Point, screen: f32, screen_width: f32) {
-    // Define vertex data for the line
-    let mut vertices: Vec<f32> = vec![];
+fn create_lines(line_list: &mut Vec<Line>, cam: Point, screen: f32, screen_width: f32) {
+    // Define line data for the line
+    let mut lines: Vec<f32> = vec![];
 
-    let mut vertices: Vec<f32> = vert_list
+    let mut lines: Vec<f32> = line_list
         .par_iter_mut()
         .fold(Vec::new, |mut acc, i| {
-            // turns vertices into screen coords
+            // turns lines into screen coords
             let mut point = point_to_screen(i.start, screen, cam);
             acc.push(point.x / screen_width);
             acc.push(point.y / screen_width);
@@ -136,8 +133,8 @@ fn create_vertices(vert_list: &mut Vec<Vertex>, cam: Point, screen: f32, screen_
         gl::GenBuffers(1, &mut vbo);
         gl::BindBuffer(gl::ARRAY_BUFFER, vbo);
         gl::BufferData(gl::ARRAY_BUFFER,
-                       (vertices.len() * std::mem::size_of::<f32>()) as GLsizeiptr,
-                       vertices.as_ptr() as *const GLvoid,
+                       (lines.len() * std::mem::size_of::<f32>()) as GLsizeiptr,
+                       lines.as_ptr() as *const GLvoid,
                        gl::STATIC_DRAW);
 
         // Specify vertex attribute layout
@@ -145,7 +142,7 @@ fn create_vertices(vert_list: &mut Vec<Vertex>, cam: Point, screen: f32, screen_
         gl::EnableVertexAttribArray(0);
         gl::VertexAttribPointer(1, 2, gl::FLOAT, gl::FALSE, 2 * std::mem::size_of::<f32>() as GLsizei, std::ptr::null());
         gl::EnableVertexAttribArray(1);
-        vertices.clear();
+        lines.clear();
     }
 
 }

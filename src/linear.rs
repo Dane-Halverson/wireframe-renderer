@@ -1,20 +1,30 @@
+use std::fs::File;
+use std::io::{self, BufRead};
+use std::path::Path;
 
-#[derive(Clone, Copy)]
+
+
+#[derive(Clone, Copy, PartialEq)]
 pub(crate) struct Point {
     pub(crate) x: f32,
     pub(crate) y: f32,
     pub(crate) z: f32
 }
 
+#[derive(Clone, Copy, PartialEq)] // Add the PartialEq trait
+pub(crate) struct Line {
+    pub(crate) start: Point,
+    pub(crate) end: Point
+}
+
+
+
 pub(crate) struct ScreenPoint {
     pub(crate) x: f32,
     pub(crate) y: f32
 }
 
-pub(crate) struct Vertex {
-    pub(crate) start: Point,
-    pub(crate) end: Point
-}
+
 
 pub(crate) fn point_to_screen(point: Point, screen: f32, camera: Point) -> ScreenPoint {
     let x_point: f32 = (point.x - camera.x)*((screen - camera.z)/(point.z - camera.z));
@@ -48,5 +58,6 @@ pub(crate) fn rotate(point: &mut Point, yaw: f32, pitch: f32, roll: f32) {
     point.z = point.x*col3[0] + point.y*col3[1] + point.z*col3[2];
 
 }
+
 
 
