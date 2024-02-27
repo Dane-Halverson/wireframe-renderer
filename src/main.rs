@@ -53,9 +53,9 @@ fn main() {
         unsafe {
             gl::Clear(gl::COLOR_BUFFER_BIT);
             gl::BindBuffer(gl::ARRAY_BUFFER, 1);
-            gl::BufferData(gl::ARRAY_BUFFER, 0, std::ptr::null(), gl::STATIC_DRAW);
+            gl::BufferData(gl::ARRAY_BUFFER, 0, std::ptr::null(), gl::DYNAMIC_DRAW);
             gl::BindBuffer(gl::ARRAY_BUFFER, 0);
-            gl::BufferData(gl::ARRAY_BUFFER, 0, std::ptr::null(), gl::STATIC_DRAW);
+            gl::BufferData(gl::ARRAY_BUFFER, 0, std::ptr::null(), gl::DYNAMIC_DRAW);
         }
 
         //fills buffer with line data
@@ -96,14 +96,14 @@ fn main() {
 fn create_lines(line_list: &mut Vec<Line>, cam: Point, screen: f32, screen_width: f32) {
     // Define line data for the line
 
-    let mut lines: Vec<f32> = line_list
+    let mut screen_lines = line_list
         .par_iter_mut()
         .fold(Vec::new, |mut acc, i| {
             // turns lines into screen coords
-            let mut point = point_to_screen(i.start, screen, cam);
+            let mut point = point_to_screen(&i.start, screen, &cam);
             acc.push(point.x / screen_width);
             acc.push(point.y / screen_width);
-            point = point_to_screen(i.end, screen, cam);
+            point = point_to_screen(&i.end, screen, &cam);
             acc.push(point.x / screen_width);
             acc.push(point.y / screen_width);
 
@@ -131,8 +131,8 @@ fn create_lines(line_list: &mut Vec<Line>, cam: Point, screen: f32, screen_width
         gl::GenBuffers(1, &mut vbo);
         gl::BindBuffer(gl::ARRAY_BUFFER, vbo);
         gl::BufferData(gl::ARRAY_BUFFER,
-                       (lines.len() * std::mem::size_of::<f32>()) as GLsizeiptr,
-                       lines.as_ptr() as *const GLvoid,
+                       (screen_lines.len() * std::mem::size_of::<f32>()) as GLsizeiptr,
+                       screen_lines.as_ptr() as *const GLvoid,
                        gl::STATIC_DRAW);
 
         // Specify vertex attribute layout
@@ -140,7 +140,7 @@ fn create_lines(line_list: &mut Vec<Line>, cam: Point, screen: f32, screen_width
         gl::EnableVertexAttribArray(0);
         gl::VertexAttribPointer(1, 2, gl::FLOAT, gl::FALSE, 2 * std::mem::size_of::<f32>() as GLsizei, std::ptr::null());
         gl::EnableVertexAttribArray(1);
-        lines.clear();
+        screen_lines.clear();
     }
 
 }
