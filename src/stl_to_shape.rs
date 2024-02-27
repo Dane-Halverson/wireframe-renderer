@@ -1,5 +1,4 @@
-use stl_io::Triangle;
-use std::path::Path;
+
 use stl_io::read_stl;
 use std::fs::OpenOptions;
 

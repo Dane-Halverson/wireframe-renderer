@@ -1,9 +1,3 @@
-use std::fs::File;
-use std::io::{self, BufRead};
-use std::path::Path;
-
-
-
 #[derive(Clone, Copy, PartialEq)]
 pub(crate) struct Point {
     pub(crate) x: f32,
@@ -41,7 +35,7 @@ pub(crate) fn rotate(point: &mut Point, yaw: f32, pitch: f32, roll: f32) {
     let col1: [f32; 3] = [
         f32::cos(pitch) * f32::cos(yaw),
         f32::cos(pitch) * f32::sin(yaw),
-        f32::sin(pitch) * -1.0
+        -f32::sin(pitch)
     ];
     let col2: [f32; 3] = [
         f32::sin(roll) * f32::sin(pitch) * f32::cos(yaw) - f32::cos(roll) * f32::sin(yaw),
@@ -49,7 +43,7 @@ pub(crate) fn rotate(point: &mut Point, yaw: f32, pitch: f32, roll: f32) {
         f32::sin(roll) * f32::cos(pitch)
     ];
     let col3: [f32; 3] = [
-        f32::cos(yaw)*f32::sin(pitch)*f32::cos(roll)+f32::sin(roll)*f32::sin(yaw),
+        f32::cos(roll)*f32::sin(pitch)*f32::cos(yaw)+f32::sin(roll)*f32::sin(yaw),
         f32::cos(roll)*f32::sin(pitch)*f32::sin(yaw)-f32::sin(roll)*f32::cos(yaw),
         f32::cos(roll) * f32::cos(pitch)
     ];

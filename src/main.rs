@@ -2,7 +2,6 @@ extern crate glfw;
 extern crate gl;
 extern crate rayon;
 use rayon::prelude::*;
-use std::path::Path;
 
 
 mod linear;
@@ -96,7 +95,6 @@ fn main() {
 
 fn create_lines(line_list: &mut Vec<Line>, cam: Point, screen: f32, screen_width: f32) {
     // Define line data for the line
-    let mut lines: Vec<f32> = vec![];
 
     let mut lines: Vec<f32> = line_list
         .par_iter_mut()
