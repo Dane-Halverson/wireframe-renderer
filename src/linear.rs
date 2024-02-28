@@ -51,9 +51,14 @@ pub(crate) fn rotate(point: &mut Point, yaw: f32, pitch: f32, roll: f32) {
         cos_roll * sin_pitch * sin_yaw - sin_roll * cos_yaw,
         cos_roll * cos_pitch
     ];
-    point.x = point.x*col1[0] + point.y*col1[1] + point.z*col1[2];
-    point.y = point.x*col2[0] + point.y*col2[1] + point.z*col2[2];
-    point.z = point.x*col3[0] + point.y*col3[1] + point.z*col3[2];
+
+    let new_x = point.x*col1[0] + point.y*col1[1] + point.z*col1[2];
+    let new_y = point.x*col2[0] + point.y*col2[1] + point.z*col2[2];
+    let new_z = point.x*col3[0] + point.y*col3[1] + point.z*col3[2];
+
+    point.x = new_x;
+    point.y = new_y;
+    point.z = new_z;
 }
 
 

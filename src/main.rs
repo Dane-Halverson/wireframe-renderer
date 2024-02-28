@@ -15,14 +15,36 @@ use crate::stl_to_shape::convert_stl_to_vec;
 
 
 fn main() {
+
+
     std::thread::Builder::new().stack_size(1000000000).spawn(||{
 
-        // Set up window
+    //the shape to render
+    let mut shape: Vec<Line> = convert_stl_to_vec("./bulb.STL", 0.5);
+    //inital rotation
+    let inital_yaw = 0.0;
+    let inital_pitch = 0.0;
+    let inital_roll = 0.0;
+    //rotation per frame
+    let yaw = 0.0;
+    let pitch = 0.01;
+    let roll = 0.0;
+    let window_size = 800;
+    let camera_position = Point{
+        x: 0.0,
+        y: 0.0,
+        z: -200.0,
+    };
+    let screen_offest = -15.0;
+    let screen_width = 20.0;
+    let frame_time = 1;
+
+    // Set up window
     use glfw::fail_on_errors;
     let mut glfw = glfw::init(fail_on_errors!()).unwrap();
 
     // Create Window
-    let (mut window, events) = glfw.create_window(800, 800, "WireFrame", glfw::WindowMode::Windowed)
+    let (mut window, events) = glfw.create_window(window_size, window_size, "WireFrame", glfw::WindowMode::Windowed)
         .expect("Failed to create GLFW window.");
 
     // Make context current
@@ -34,13 +56,12 @@ fn main() {
 
     unsafe { gl::ClearColor(0.0, 0.0, 0.0, 0.0); }
 
-    //the shape to render
-    let mut shape: Vec<Line> = convert_stl_to_vec("./bulb.STL", 0.5);
+    
 
     //initial rotation
     for i in shape.iter_mut() {
-        rotate(&mut i.start, 0.0, 0.0, 0.0);
-        rotate(&mut i.end, 0.0, 0.0, 0.0);
+        rotate(&mut i.start, inital_yaw, inital_pitch, inital_roll);
+        rotate(&mut i.end, inital_yaw, inital_pitch, inital_roll);
     }
 
 
@@ -59,11 +80,7 @@ fn main() {
         }
 
         //fills buffer with line data
-        create_lines(&mut shape, Point{
-            x: 0.0,
-            y: 0.0,
-            z: -200.0,
-        }, -15.0, 16.0);
+        create_lines(&mut shape, camera_position, screen_offest, screen_width, yaw, pitch, roll);
 
         // Draws all lines
         unsafe {
@@ -85,7 +102,7 @@ fn main() {
                 _ => {}
             }
         }
-        let dur = time::Duration::from_millis(10);
+        let dur = time::Duration::from_millis(frame_time);
 
         thread::sleep(dur);
     }
@@ -93,7 +110,7 @@ fn main() {
 
 }
 
-fn create_lines(line_list: &mut Vec<Line>, cam: Point, screen: f32, screen_width: f32) {
+fn create_lines(line_list: &mut Vec<Line>, cam: Point, screen: f32, screen_width: f32, yaw: f32, pitch: f32, roll: f32) {
     // Define line data for the line
 
     let mut screen_lines = line_list
@@ -108,8 +125,8 @@ fn create_lines(line_list: &mut Vec<Line>, cam: Point, screen: f32, screen_width
             acc.push(point.y / screen_width);
 
             // rotates the points
-            rotate(&mut i.start, 0.0, 0.01, 0.0);
-            rotate(&mut i.end, 0.0, 0.01, 0.0);
+            rotate(&mut i.start, yaw, pitch, roll);
+            rotate(&mut i.end, yaw, pitch, roll);
 
             acc
         })
@@ -119,10 +136,8 @@ fn create_lines(line_list: &mut Vec<Line>, cam: Point, screen: f32, screen_width
         });
 
     // create a vertex object and vertex buffer object
-    let
-        mut vao = 1;
-    let
-        mut vbo = 1;
+    let mut vao = 1;
+    let mut vbo = 1;
 
     unsafe {
         gl::GenVertexArrays(1, &mut vao);
