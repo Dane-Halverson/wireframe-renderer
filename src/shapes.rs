@@ -1,9 +1,9 @@
-use crate::linear::{Point, Vertex};
+use crate::linear::{Point, Line};
 
-pub(crate) fn get_cube() -> Vec<Vertex> {
-    let mut line: Vec<Vertex> = vec![
+pub(crate) fn get_cube() -> Vec<Line> {
+    let mut line: Vec<Line> = vec![
         //near bottom line
-        Vertex{start: Point{
+        Line{start: Point{
             x: -8.0,
             y: -8.0,
             z: -8.0,
@@ -13,7 +13,7 @@ pub(crate) fn get_cube() -> Vec<Vertex> {
             z: -8.0,
         }},
         //near top line
-        Vertex{start: Point{
+        Line{start: Point{
             x: -8.0,
             y: 8.0,
             z: -8.0,
@@ -23,7 +23,7 @@ pub(crate) fn get_cube() -> Vec<Vertex> {
             z: -8.0,
         }},
         //far bottom line
-        Vertex{start: Point{
+        Line{start: Point{
             x: -8.0,
             y: -8.0,
             z: 8.0,
@@ -33,7 +33,7 @@ pub(crate) fn get_cube() -> Vec<Vertex> {
             z: 8.0,
         }},
         //far top line
-        Vertex{start: Point{
+        Line{start: Point{
             x: -8.0,
             y: 8.0,
             z: 8.0,
@@ -43,7 +43,7 @@ pub(crate) fn get_cube() -> Vec<Vertex> {
             z: 8.0,
         }},
         //left bottom line
-        Vertex{start: Point{
+        Line{start: Point{
             x: -8.0,
             y: -8.0,
             z: -8.0,
@@ -54,7 +54,7 @@ pub(crate) fn get_cube() -> Vec<Vertex> {
         }},
 
         //right bottom line
-        Vertex{start: Point{
+        Line{start: Point{
             x: 8.0,
             y: -8.0,
             z: 8.0,
@@ -64,7 +64,7 @@ pub(crate) fn get_cube() -> Vec<Vertex> {
             z: -8.0,
         }},
         //left top line
-        Vertex{start: Point{
+        Line{start: Point{
             x: -8.0,
             y: 8.0,
             z: -8.0,
@@ -74,7 +74,7 @@ pub(crate) fn get_cube() -> Vec<Vertex> {
             z: 8.0,
         }},
         //right top line
-        Vertex{start: Point{
+        Line{start: Point{
             x: 8.0,
             y: 8.0,
             z: -8.0,
@@ -84,7 +84,7 @@ pub(crate) fn get_cube() -> Vec<Vertex> {
             z: 8.0,
         }},
         //far left line
-        Vertex{start: Point{
+        Line{start: Point{
             x: -8.0,
             y: -8.0,
             z: 8.0,
@@ -94,7 +94,7 @@ pub(crate) fn get_cube() -> Vec<Vertex> {
             z: 8.0,
         }},
         //far right line
-        Vertex{start: Point{
+        Line{start: Point{
             x: 8.0,
             y: -8.0,
             z: 8.0,
@@ -104,7 +104,7 @@ pub(crate) fn get_cube() -> Vec<Vertex> {
             z: 8.0,
         }},
         //near left line
-        Vertex{start: Point{
+        Line{start: Point{
             x: -8.0,
             y: -8.0,
             z: -8.0,
@@ -114,7 +114,7 @@ pub(crate) fn get_cube() -> Vec<Vertex> {
             z: -8.0,
         }},
         //near right line
-        Vertex{start: Point{
+        Line{start: Point{
             x: 8.0,
             y: -8.0,
             z: -8.0,
@@ -129,11 +129,11 @@ pub(crate) fn get_cube() -> Vec<Vertex> {
 
 
 
-pub(crate) fn get_square() -> Vec<Vertex> {
-    let mut line: Vec<Vertex> = vec![
+pub(crate) fn get_square() -> Vec<Line> {
+    let mut line: Vec<Line> = vec![
 
         //near bottom line
-        Vertex{start: Point{
+        Line{start: Point{
             x: -8.0,
             y: -8.0,
             z: 0.0,
@@ -143,7 +143,7 @@ pub(crate) fn get_square() -> Vec<Vertex> {
             z: 0.0,
         }},
         //near top line
-        Vertex{start: Point{
+        Line{start: Point{
             x: -8.0,
             y: 8.0,
             z: 0.0,
@@ -153,7 +153,7 @@ pub(crate) fn get_square() -> Vec<Vertex> {
             z: -0.0,
         }},
         //far bottom line
-        Vertex{start: Point{
+        Line{start: Point{
             x: -8.0,
             y: 8.0,
             z: 0.0,
@@ -163,7 +163,7 @@ pub(crate) fn get_square() -> Vec<Vertex> {
             z: 0.0,
         }},
         //far top line
-        Vertex{start: Point{
+        Line{start: Point{
             x: 8.0,
             y: 8.0,
             z: 0.0,
@@ -179,9 +179,9 @@ pub(crate) fn get_square() -> Vec<Vertex> {
 }
 
 
-pub(crate) fn get_tranglur_pyrimid() -> Vec<Vertex> {
-    let mut line: Vec<Vertex> = vec![
-        Vertex{start: Point{
+pub(crate) fn get_tranglur_pyrimid() -> Vec<Line> {
+    let mut line: Vec<Line> = vec![
+        Line{start: Point{
             x: 0.0,
             y: 6.92620,
             z: 0.0,
@@ -190,7 +190,7 @@ pub(crate) fn get_tranglur_pyrimid() -> Vec<Vertex> {
             y: -6.92620,
             z: -6.92620,
         }},
-        Vertex{start: Point{
+        Line{start: Point{
             x: 0.0,
             y: 6.92620,
             z: 0.0,
@@ -200,7 +200,7 @@ pub(crate) fn get_tranglur_pyrimid() -> Vec<Vertex> {
             z: -6.92620,
 
         }},
-        Vertex{start: Point{
+        Line{start: Point{
             x: 0.0,
             y: 6.92620,
             z: 0.0,
@@ -210,7 +210,7 @@ pub(crate) fn get_tranglur_pyrimid() -> Vec<Vertex> {
             z: 6.92620,
         }},
         //base
-        Vertex{start: Point{
+        Line{start: Point{
             x: 8.0,
             y: -6.92620,
             z: -6.92620,
@@ -219,7 +219,7 @@ pub(crate) fn get_tranglur_pyrimid() -> Vec<Vertex> {
             y: -6.92620,
             z: -6.92620,
         }},
-        Vertex{start: Point{
+        Line{start: Point{
             x: 8.0,
             y: -6.92620,
             z: -6.92620,
@@ -228,7 +228,7 @@ pub(crate) fn get_tranglur_pyrimid() -> Vec<Vertex> {
             y: -6.92620,
             z: 6.92620,
         }},
-        Vertex{start: Point{
+        Line{start: Point{
             x: 0.0,
             y: -6.92620,
             z: 6.92620,

@@ -6,13 +6,14 @@ use rayon::prelude::*;
 
 mod linear;
 mod stl_to_shape;
+mod shapes;
 
 use std::{thread, time};
 use glfw::{Action, Context, Key};
 use gl::types::*;
 use crate::linear::{point_to_screen, rotate, Point, Line};
 use crate::stl_to_shape::convert_stl_to_vec;
-
+use crate::shapes::get_cube;
 
 fn main() {
 
@@ -20,7 +21,7 @@ fn main() {
     std::thread::Builder::new().stack_size(1000000000).spawn(||{
 
     //the shape to render
-    let mut shape: Vec<Line> = convert_stl_to_vec("./bulb.STL", 0.5);
+    let mut shape: Vec<Line> = get_cube();//convert_stl_to_vec("./bulb.STL", 0.5);
     //inital rotation
     let inital_yaw = 0.0;
     let inital_pitch = 0.0;
